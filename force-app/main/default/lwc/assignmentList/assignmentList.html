@@ -1,0 +1,54 @@
+<template>
+    <lightning-card title="Lightning Datatable Example">
+    <lightning-button slot="actions" label="Edit" onclick={editRecord}></lightning-button> 
+    <lightning-button slot="actions" label="New" onclick={newRecord}></lightning-button> 
+        <div class="slds-m-around_medium">
+            <lightning-input 
+                type="search" 
+                onchange={handleKeyChange} 
+                class="slds-m-bottom_small"           
+                label="Search" 
+                value={searchKey}>
+            </lightning-input>
+            
+            <lightning-datatable 
+                data-id="table"
+                key-field="Id" 
+                data={assignmentData} 
+                columns={columns} 
+                sorted-by={sortedBy}
+                sorted-direction={sortedDirection} 
+                onsort={sortColumns}
+                onrowselection={onRowSelection}
+                >
+            </lightning-datatable>
+            </br>
+
+            <lightning-layout horizontal-align="space">
+                <lightning-layout-item flexibility="auto">
+                    <lightning-button 
+                        label="Previous" 
+                        icon-name="utility:chevronleft" 
+                        onclick={previousHandler}>
+                    </lightning-button>
+                </lightning-layout-item>
+                <lightning-layout-item flexibility="auto">
+                    Page {page} of {totalPage}
+                </lightning-layout-item>
+                <lightning-layout-item flexibility="auto">
+                    <lightning-button 
+                        label="Next" 
+                        icon-name="utility:chevronright" 
+                        icon-position="right"
+                        onclick={nextHandler}>
+                    </lightning-button>
+                </lightning-layout-item>
+            </lightning-layout>
+        </div>
+    </lightning-card>
+
+    <template if:true={showModal}>
+        <c-assignment-form onhidenew={hideModal} record-id={recordId} modal-header={modalHeaderName}></c-assignment-form>
+    </template>
+
+</template>
