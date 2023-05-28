@@ -3,8 +3,6 @@ import { refreshApex } from '@salesforce/apex';
 import getOpps from '@salesforce/apex/AssignmentListController.getAssigments';
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
 
-// import PopupModal from "c/popupModal";
-
 const columns = [
   {
     type: "text",
