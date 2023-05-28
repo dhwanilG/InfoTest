@@ -3,6 +3,8 @@ import { refreshApex } from '@salesforce/apex';
 import getOpps from '@salesforce/apex/AssignmentListController.getAssigments';
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
 
+// import PopupModal from "c/popupModal";
+
 const columns = [
   {
     type: "text",
@@ -50,7 +52,7 @@ export default class AssignmentList extends LightningElement {
   showModal = false;
   modalHeaderName;
   recordId;
-  @track selectedRows;
+  selectedRows;
 
   @wire(getOpps, {searchKey: '$searchKey',sortDirection: '$sortedDirection'})
   wiredAssignments({ error, data }) {
@@ -120,9 +122,9 @@ export default class AssignmentList extends LightningElement {
       this.processRecords(data);
   }
 
-  onRowSelection( event ) {
-    this.recordId = event.detail.selectedRows[0].Id;
-  }
+  // onRowSelection( event ) {
+  //     this.recordId = event.detail.selectedRows[0].Id;
+  // }
 
   newRecord() {
     this.showModal = true;
@@ -131,19 +133,18 @@ export default class AssignmentList extends LightningElement {
   }
 
   editRecord() {
-    if(this.template.querySelector("lightning-datatable").selectedRows.length > 1)
-    {
+    let selectedRows = this.template.querySelector("lightning-datatable").getSelectedRows();
+    if(selectedRows.length < 1) {
+      this.showToastMessage('Please select one record to edit.');
+    } else if(selectedRows.length > 1) {
       this.showToastMessage('Please Select single record to edit');
       return;
-    }
-    if(this.recordId !== undefined && this.recordId !== '') {
+    } else {
+      this.recordId = this.template.querySelector("lightning-datatable").getSelectedRows()[0].Id;
       this.showModal = true;
       this.modalHeaderName = 'Edit';
       this.template.querySelector("lightning-datatable").selectedRows = [];
       this.wiredAssignments();
-    }
-    else{
-      this.showToastMessage('Please select one record to edit.')
     }
   }
 
